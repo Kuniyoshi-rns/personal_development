@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>新規登録</title>
+    <link href="/css/commons.css" rel="stylesheet">
+</head>
+
+<body class="login-body">
+<div class="header">
+    <h1 class="site_logo">エラー共有サイト</h1>
+</div>
+
+<div class="login-form" style="height:auto; margin-top:50px">
+    <h3 style="margin-top:5%"> 新規登録 </h3>
+    <p class="error">[[ ${errorMsg} ]]</p>
+
+    <form action="/createUser" method="post" th:object="${createForm}">
+        <fieldset class="label-130">
+            <div class="cp_iptxt">
+                <label for="create_loginId">ログインID</label>
+                <input id="create_loginId" class="base-input" type="text" th:field="*{loginId}" name="loginId" placeholder="ID" maxlength="20">
+                <div class="error" th:each="error: ${#fields.errors('loginId')}">[[ ${error} ]]</div>
+            </div>
+
+            <div>
+                <label for="create-userName" style="margin-top:10px">ユーザー名</label>
+                <input id="create-userName" class="base-input" type="text" th:field="*{userName}" name="userName" placeholder="ユーザー名" maxlength="20">
+                <div class="error" th:each="error: ${#fields.errors('userName')}">[[ ${error} ]]</div>
+            </div>
+            <div class="select_block">
+                <label style="margin-top:10px">所属企業</label>
+                <select th:field="*{companyId}" class="base-text" style="width:75%">
+                    <option th:each="company : ${companies}" th:value="${company.id}" th:text="${company.name}"></option>
+                </select>
+            </div>
+
+            <div>
+                <label for="create-password" style="margin-top:10px">パスワード</label>
+                <input id="create-password" class="base-input" type="password" th:field="*{password}" name="pass" placeholder="PASS" maxlength="50">
+                <div class="error" th:each="error: ${#fields.errors('password')}">[[ ${error} ]]</div>
+            </div>
+
+            <div>
+                <label for="create-subPassword" style="width:auto;margin-top:10px">パスワード(確認用)</label>
+                <input id="create-subPassword" class="base-input" type="password" th:field="*{subPassword}" name="subPass" placeholder="確認用PASS" maxlength="50">
+                <div class="error">[[ ${passErrorMsg} ]]</div>
+            </div>
+
+        </fieldset>
+        <button id="login-btn" class="custom-btn" type="submit">
+            登録
+        </button>
+    </form>
+</div>
+<!--<script>-->
+<!--    'use strict'-->
+<!--    document.getElementById('login-btn').addEventListener('click', () => {-->
+<!--      location.href = './menu.html'-->
+<!--    })-->
+<!--</script>-->
+</body>
+</html>

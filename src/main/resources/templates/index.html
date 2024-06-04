@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>ログイン</title>
+    <link href="/css/commons.css" rel="stylesheet">
+</head>
+
+<body class="login-body">
+<div class="header">
+    <h1 class="site_logo">エラー共有サイト</h1>
+</div>
+
+<div class="login-form">
+    <h3 style="margin-top:5%"> ログイン </h3>
+    <p class="error">[[ ${errorMsg} ]]</p>
+
+    <form action="/index" method="post" th:object="${loginForm}">
+        <fieldset class="label-130">
+            <div class="cp_iptxt">
+                <label for="login_loginId">ログインID</label>
+                <input id="login_loginId" class="base-input" type="text" th:field="*{loginId}" name="loginId" placeholder="ID" maxlength="20">
+                <div class="error" th:each="error: ${#fields.errors('loginId')}">[[ ${error} ]]</div>
+            </div>
+
+            <div>
+                <label for="login_password">パスワード</label>
+                <input id="login_password" class="base-input" type="password" th:field="*{password}" name="pass" placeholder="PASS" maxlength="50">
+                <div class="error" th:each="error: ${#fields.errors('password')}">[[ ${error} ]]</div>
+            </div>
+        </fieldset>
+        <button id="login-btn" class="custom-btn" type="submit">
+            ログイン
+        </button>
+        <button id="new-user" class="custom-btn" onclick="location.href='/createUser'" type="button">
+            新規登録
+        </button>
+    </form>
+</div>
+<!--<script>-->
+<!--    'use strict'-->
+<!--    document.getElementById('login-btn').addEventListener('click', () => {-->
+<!--      location.href = './menu.html'-->
+<!--    })-->
+<!--</script>-->
+</body>
+</html>
