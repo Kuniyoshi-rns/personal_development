@@ -297,8 +297,8 @@ hr {
 
 textarea {
   resize: none;
-  width: 300px;
-  height: 100px;
+  width: 400px;
+  height: 800px;
 }
 
 /** 確認モーダル用 **/

@@ -1,18 +1,19 @@
 package com.example.pdWeb.Contoroller;
 
 import com.example.pdWeb.Company.ICompanyService;
+import com.example.pdWeb.Post.IPostService;
+import com.example.pdWeb.Post.PostForm;
 import com.example.pdWeb.User.IUserService;
 import com.example.pdWeb.User.LoginForm;
 import com.example.pdWeb.User.CreateForm;
+import com.example.pdWeb.User.User;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class controller {
@@ -22,6 +23,8 @@ public class controller {
     IUserService userService;
     @Autowired
     ICompanyService companyService;
+    @Autowired
+    IPostService postService;
 
     @GetMapping("/index")
     public String index(@ModelAttribute("loginForm") LoginForm loginForm) {
@@ -47,11 +50,16 @@ public class controller {
         }
     }
     @GetMapping("/menu")
-    public String menu(){
+    public String menu(@RequestParam(name = "keyword",defaultValue = "") String find,Model model){
         if(session.getAttribute("user") == null){
             return "redirect:/index";
         }else{
-            System.out.println(companyService.findAll());
+            if(find.isBlank()) {
+                System.out.println(postService.findAll());
+                model.addAttribute("posts", postService.findAll());
+            }else{
+                model.addAttribute("posts",postService.findByTitleOrBody(find));
+            }
             return "menu";
         }
     }
@@ -99,6 +107,27 @@ public class controller {
                 model.addAttribute("companies",companyService.findAll());
                 return "createUser";
             }
+        }
+    }
+    @GetMapping("/post/{id}")
+    public String post(@PathVariable("id") int id,Model model){
+        model.addAttribute("post",postService.findById(id));
+        return "post";
+    }
+
+    @GetMapping("/insert")
+    public String gInsert(@ModelAttribute("postForm")PostForm postForm){
+        return "insert";
+    }
+
+    @PostMapping("/insert")
+    public String pInsert(@Validated @ModelAttribute("postForm")PostForm postForm,BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            return "insert";
+        }else{
+            User user = (User)session.getAttribute("user");
+            postService.insert(postForm,user.id());
+            return "redirect:/menu";
         }
     }
 }

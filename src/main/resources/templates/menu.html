@@ -4,13 +4,38 @@
     <meta charset="UTF-8">
     <title>メニュー</title>
     <link href="/css/commons.css" rel="stylesheet">
-    <link href="css/commons.css" rel="stylesheet">
+    <link href="../static/css/commons.css" rel="stylesheet">
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 </head>
 <body>
     <th:block th:insert="common/header"></th:block>
 
     <hr>
+
+    <div class="btn" style="margin-left:10%; margin-top:5px"><a class="basic-btn" href="/insert"> + </a></div>
+
+    <form method="get" action="#" class="search-form">
+        <div class="search-container">
+            <input type="text" name="keyword" size="25" placeholder="キーワード検索">
+            <input type="submit" value="&#xf002">
+        </div>
+    </form>
+
+    <table>
+        <thead>
+        <tr>
+            <th>タイトル</th>
+            <th>作成者</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each ="post : ${posts}" data-href="location.href='/index'">
+            <td><a th:href="'/post/'+${post.id}" style="color:purple">[[ ${post.title} ]]</a></td>
+            <td th:text="${post.author}"></td>
+        </tr>
+
+    </table>
 
 </body>
 </html>
