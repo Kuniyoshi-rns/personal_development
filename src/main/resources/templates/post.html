@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ja" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>[[${post.title}]]</title>
+    <link href="/css/commons.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/styles/dracula.min.css">
+    <style>code {
+    display: inline-block;
+    padding: 0.1em 0.25em; /* 文字周りの余白 */
+    color: #444; /* 文字色 */
+    background-color: #e7edf3; /* 背景色 */
+    border-radius: 3px; /* 角丸 */
+    border: solid 1px #d6dde4; /* 枠線 */
+    font-family: Consolas, Menlo, Monaco, -apple-system, BlinkMacSystemFont, "Segoe UI", Meiryo, monospace;
+    width:80%;
+  }</style>
+</head>
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.7.0/marked.js"></script>
+
+<th:block th:insert="common/header"></th:block>
+
+<hr>
+<div>
+    <div style="display:flex">
+        <input onclick="location.href='/menu'" type="button" value="戻る" class="cancel-btn" style="margin-left:10%;margin-top:0%">
+        <input th:if="${session.user.id} == ${post.author_id}" type="button" th:onclick="|location.href='/update/__${post.id}__'|" value="編集" class="basic-btn" style="margin-top:0%">
+    </div>
+    <h1 style="margin-left:10%;">[[ ${post.title} ]]</h1>
+
+    <p style="margin-left:15%; margin-top:0px">[[ ${post.author} ]]</p>
+
+    <hr>
+
+    <div id="postBody" style="margin-left:15%">
+
+    </div>
+    <div class="btns">
+        <button type="button" onclick="location.href='/menu'" class="cancel-btn">戻る</button>
+    </div>
+
+    <script th:inline="javascript">
+        var here = [[ ${post.body} ]]
+        var md = marked(here);
+        document.getElementById("postBody").innerHTML = md;
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.1/highlight.min.js"></script>
+    <script>
+        // ハイライトを実行
+        hljs.initHighlightingOnLoad();
+    </script>
+      <script>
+      </script>
+</div>
+</body>
+</html>

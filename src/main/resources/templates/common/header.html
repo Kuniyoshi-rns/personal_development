@@ -1,7 +1,9 @@
 <div class="header">
     <h1 class="site_logo"><a href="/menu">エラー共有サイト</a></h1>
     <div class="user">
-        <p class="user_name">[[ ${session.user.u_name} ]]さん</p>
+        <form class="logout_form">
+            <button class="custom-btn" type="button" onclick="location.href='/mypage'" style="background-color:#68a9eb;">[[ ${session.user.u_name} ]]</button>
+        </form>
         <form class="logout_form" action="/logout" method="get">
             <button class="custom-btn" type="submit">ログアウト</button>
         </form>

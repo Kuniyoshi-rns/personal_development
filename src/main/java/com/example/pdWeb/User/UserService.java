@@ -17,4 +17,9 @@ public class UserService implements IUserService{
     public void insert(CreateForm createForm) {
         userRepository.insert(createForm);
     }
+
+    @Override
+    public User findById(int id) {
+        return userRepository.findById(id);
+    }
 }

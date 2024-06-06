@@ -29,4 +29,12 @@ public class UserRepository implements IUserRepository{
         param.addValue("company_id",Integer.parseInt(createForm.getCompanyId()));
         jdbcTemplate.update("insert into users(login_id,name,company_id,password) values(:login_id,:name,:company_id,:pass)",param);
     }
+
+    @Override
+    public User findById(int id) {
+        var param = new MapSqlParameterSource();
+        param.addValue("id",id);
+        var list = jdbcTemplate.query("select users.id,login_id,password,users.name u_name,companies.name c_name from users join companies on users.company_id=companies.id where users.id=:id",param,new DataClassRowMapper<>(User.class));
+        return list.isEmpty()?null:list.get(0);
+    }
 }

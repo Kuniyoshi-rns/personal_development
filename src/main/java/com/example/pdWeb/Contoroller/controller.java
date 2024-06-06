@@ -55,7 +55,6 @@ public class controller {
             return "redirect:/index";
         }else{
             if(find.isBlank()) {
-                System.out.println(postService.findAll());
                 model.addAttribute("posts", postService.findAll());
             }else{
                 model.addAttribute("posts",postService.findByTitleOrBody(find));
@@ -128,6 +127,54 @@ public class controller {
             User user = (User)session.getAttribute("user");
             postService.insert(postForm,user.id());
             return "redirect:/menu";
+        }
+    }
+
+    @GetMapping("/mypage")
+    public String mypage(Model model){
+        User user = (User)session.getAttribute("user");
+        System.out.println(user.id());
+        model.addAttribute("posts",postService.findMyAll(user.id()));
+        return "mypage";
+    }
+
+    @GetMapping("/update/{id}")
+    public String gUpdate(@PathVariable("id")int id,@ModelAttribute("postForm") PostForm postForm, Model model){
+        var post = postService.findById(id);
+        System.out.println(post);
+        postForm.setTitle(post.title());
+        postForm.setBody(post.body());
+        model.addAttribute("p_id",id);
+        return "update";
+    }
+
+    @PostMapping("/update/{id}")
+    public String pUpdate(@PathVariable("id")int id,@Validated @ModelAttribute("postForm") PostForm postForm,BindingResult bindingResult,Model model){
+        if(bindingResult.hasErrors()){
+            model.addAttribute("p_id",id);
+            return "update";
+        }else{
+            postService.update(id,postForm);
+            return "redirect:/menu";
+        }
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable("id")int id){
+        postService.delete(id);
+        return "redirect:/menu";
+    }
+
+    @GetMapping("/userpage/{id}")
+    public String userPage(@PathVariable("id")int id,Model model){
+        User user = (User)session.getAttribute("user");
+        System.out.println(user.id());
+        if(user.id()==id){
+            return "redirect:/mypage";
+        }else {
+            model.addAttribute("user",userService.findById(id));
+            model.addAttribute("posts", postService.findMyAll(id));
+            return "userpage";
         }
     }
 }
